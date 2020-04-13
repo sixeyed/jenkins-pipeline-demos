@@ -1,0 +1,35 @@
+pipeline {
+   agent any
+    environment {
+      RELEASE='20.04'
+    }
+   stages {
+      stage('Build') {
+            environment {
+               LOG_LEVEL='INFO'
+            }
+            steps {
+               echo "Building release ${RELEASE} with log level ${LOG_LEVEL}..."
+               sh 'chmod +x ../build.sh'
+               withCredentials([string(credentialsId: 'an-api-key', variable: 'API_KEY')]) {
+                  sh '''
+                     ../build.sh
+                  '''
+               }
+            }
+        }
+        stage('Test') {
+            steps {
+               echo "Testing release ${RELEASE}"
+               writeFile file: 'test-results.txt', text: 'passed'               
+            }
+        }
+   }
+   post {
+      success {
+         archiveArtifacts 'test-results.txt'
+         slackSend channel: '#builds',
+                   message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName}."
+      }
+   }
+}
