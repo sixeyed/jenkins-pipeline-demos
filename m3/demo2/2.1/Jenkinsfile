@@ -1,0 +1,13 @@
+library identifier: 'diamol-jenkins-library-test@master', 
+        retriever: modernSCM([$class: 'GitSCMSource', remote: 'http://git.athome.ga/sixeyed/diamol-jenkins-library-test.git'])
+
+pipeline {
+    agent any
+    stages {
+        stage('Audit tools') {                        
+            steps {
+                auditTools()
+            }
+        }
+    }
+}
