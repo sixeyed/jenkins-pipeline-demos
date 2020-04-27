@@ -1,0 +1,22 @@
+pipeline {
+    agent {
+        dockerfile {
+            dir 'm4'
+        }
+    }
+    stages {
+        stage('Verify') {
+            steps {
+                sh '''
+                  dotnet --list-sdks
+                  dotnet --list-runtimes
+                '''
+            }
+        }   
+        stage('Smoke Test') {
+            steps {
+              sh 'docker run sixeyed/pi:psod-pipelines'
+            }
+        }
+    }
+}
