@@ -1,6 +1,6 @@
 def pipelines = [
-    [name: 'm4-demo2-1', scriptPath: 'm4/demo2/2.1/Jenkinsfile'],
-    [name: 'm4-demo2-2', scriptPath: 'm4/demo2/2.2/Jenkinsfile']
+    [name: 'm4/demo2-1', scriptPath: 'm4/demo2/2.1/Jenkinsfile'],
+    [name: 'm4/demo2-2', scriptPath: 'm4/demo2/2.2/Jenkinsfile']
 ]
 
 for(p in pipelines) {
