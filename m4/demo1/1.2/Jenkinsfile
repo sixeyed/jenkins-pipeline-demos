@@ -2,7 +2,7 @@ pipeline {
     agent {
         dockerfile {
             dir 'm4'
-            filename 'Dockerfile.fixed'
+            filename 'Dockerfile.sdk'
         }
     }
     stages {
