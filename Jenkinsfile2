@@ -5,6 +5,15 @@ pipeline {
         stage('Hello') {
             steps {
                 script {
+                def appJson = libraryResource 'applications.json'
+                def data = readJSON text: appJson
+                def appid
+                for ( app in data.applications ) {
+                    if (app.name == appname) {
+                      appid = app.id
+                      break
+                    }
+                }
                 def author_name = sh(script: "git log -n 1 ${env.GIT_COMMIT} --format=%aN", returnStdout: true).trim()
                 sh 'printenv'
                     def data = [
@@ -18,6 +27,8 @@ pipeline {
                         ]
                     def test = writeJSON returnText: true, json: data
                     echo "${test}"
+                 def url= "asdasdsad${appid}"
+                 // continue the pipeline
                 }
             }
         }
