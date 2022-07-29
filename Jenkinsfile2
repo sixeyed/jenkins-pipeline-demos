@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                script {
+                echo 'env'
+                    def data = [
+                    'revision': "${env.BUILD_ID}",
+                    'changelog': "${env.JOB_NAME}",
+                    'description': "${env.GIT_COMMIT_ID}",
+                    'user' : "${env.GIT_COMMITTER_NAME}"
+                    ]
+                    def deploy = [
+                        'deployment': data
+                        ]
+                    def test = writeJSON returnText: true, json: data
+                    echo "${test}"
+                }
+            }
+        }
+    }
+}
