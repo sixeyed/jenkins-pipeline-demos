@@ -5,7 +5,7 @@ pipeline {
         stage('Hello') {
             steps {
                 script {
-                echo 'env'
+                sh 'printenv'
                     def data = [
                     'revision': "${env.BUILD_ID}",
                     'changelog': "${env.JOB_NAME}",
