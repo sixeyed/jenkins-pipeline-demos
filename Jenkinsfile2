@@ -15,12 +15,14 @@ pipeline {
                     }
                 }
                 def author_name = sh(script: "git log -n 1 ${env.GIT_COMMIT} --format=%aN", returnStdout: true).trim()
+                def time = new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC"))
                 sh 'printenv'
                     def data = [
                     'revision': "${env.BUILD_ID}",
                     'changelog': "${env.JOB_NAME}",
                     'description': "${env.GIT_COMMIT}",
-                    'user' : "${author_name}"
+                    'user' : "${author_name}",
+                    'timestamp' : "${time}"
                     ]
                     def deploy = [
                         'deployment': data
