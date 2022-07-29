@@ -9,7 +9,7 @@ pipeline {
                     def data = [
                     'revision': "${env.BUILD_ID}",
                     'changelog': "${env.JOB_NAME}",
-                    'description': "${env.GIT_COMMIT_ID}",
+                    'description': "${env.GIT_COMMIT}",
                     'user' : "${env.GIT_COMMITTER_NAME}"
                     ]
                     def deploy = [
