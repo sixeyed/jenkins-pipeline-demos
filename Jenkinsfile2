@@ -7,7 +7,7 @@ pipeline {
                 script {
                 def appJson = libraryResource 'applications.json'
                 def data = readJSON text: appJson
-                def appid
+                def appid = ""
                 for ( app in data.applications ) {
                     if (app.name == appname) {
                       appid = app.id
@@ -29,7 +29,7 @@ pipeline {
                         ]
                     def test = writeJSON returnText: true, json: data
                     echo "${test}"
-                 def url= "asdasdsad${appid}"
+                 // do the needful WA
                  // continue the pipeline
                 }
             }
