@@ -5,12 +5,13 @@ pipeline {
         stage('Hello') {
             steps {
                 script {
+                def author_name = sh(script: "git log -n 1 ${env.GIT_COMMIT} --format=%aN", returnStdout: true).trim()
                 sh 'printenv'
                     def data = [
                     'revision': "${env.BUILD_ID}",
                     'changelog': "${env.JOB_NAME}",
                     'description': "${env.GIT_COMMIT}",
-                    'user' : "${env.GIT_COMMITTER_NAME}"
+                    'user' : "${author_name}"
                     ]
                     def deploy = [
                         'deployment': data
