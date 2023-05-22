@@ -23,6 +23,9 @@ pipeline {
                     }
                     steps{
                         sh "printenv"
+                        sh "cd  ./dist && for f in jobserve*.whl; do mv $f ${f%.whl}-${BRANCH_NAME}.whl; done"
+                        sh "cd  ./dist && for f in jobserve*.tar.gz; do mv $f ${f%.tar.gz}-${BRANCH_NAME}.tar.gz; done"
+                        sh "ls -ltra"
                         echo "Upload artifactory"
                     }
                 }
