@@ -3,16 +3,23 @@ pipeline {
 
     stages {
         stage('Store Artifacts'){ //Combined to improve speed
-            when { 
-               expression {
-               return env?.CHANGE_ID
-               }
-                
+            when {
+             anyOf {
+                branch 'master'
+                expression {
+                 return env?.CHANGFE_ID
+                }
+              }
             }
             parallel{
                 stage('Upload to Artifactory') {
                     when {
-                        not { branch 'master' }
+                     anyOf {
+                        branch 'master'
+                        expression {
+                         return env?.CHANGFE_ID
+                        }
+                      }
                     }
                     steps{
                         sh "printenv"
@@ -21,18 +28,17 @@ pipeline {
                 }
                 stage('Pushing New Tags') {
                     when { 
-                branch 'master'
-                
-            }
+                     branch 'master'
+                    }
                     steps {
                        echo "Pushing new tags"
                     }
                 }
                 stage('Docker development image') {
                     when { 
-                branch 'master'
+                     branch 'master'
                 
-            }
+                   }
                     steps {
                        echo "Docker development image"
                     }
