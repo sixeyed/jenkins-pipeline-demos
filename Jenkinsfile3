@@ -1,44 +1,91 @@
+properties([
+        [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '10', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '']]
+]);
+
+def defaultRegistry = "361053095112.dkr.ecr.us-east-1.amazonaws.com"
+
 pipeline {
+    options {
+        skipDefaultCheckout()
+        timestamps ()
+    }
     agent any
 
+    parameters {
+        string(name: "DOCKER_REGISTRY",
+            defaultValue: defaultRegistry)
+        string(name: "DOCKER_BUILD_IMAGE",
+            defaultValue: "${defaultRegistry}/bmll-compute-env-build-agent:latest")
+        string(name: "DOCKER_DEV_REPO",
+            defaultValue: "${defaultRegistry}/ed-jobserve-dev")
+        booleanParam(
+              defaultValue: false,
+              description: 'Only Appliocable for PR Jobs',
+              name: 'STORE_PR_ARTIFACT'
+            )
+    }
+
+    environment {
+        SLACK_CHANNEL = "ed-team"
+        JIRA_REGEX = '.*(CE|PLAT|BMLL|SYS|IQA|ED|CR|LD|NCO)-[0-9]+.*$'
+        BLACKDUCK_CREDENTIAL='blackduck-token'
+        DETECT_PROJECT_NAME='ED/jobserve'
+    }
     stages {
         stage('Store Artifacts'){ //Combined to improve speed
             when {
-            anyOf {
-               branch 'master'
-               expression {
-                return env?.CHANGFE_ID
-               } 
+             anyOf {
+                branch 'master'
+                allOf {
+                expression {
+                 return env?.CHANGE_ID
+                }
+                expression {
+                  return params.STORE_PR_ARTIFACT == true
+                }
+                }
+              }
             }
             parallel{
                 stage('Upload to Artifactory') {
                     when {
-                    anyOf {
+                     anyOf {
                         branch 'master'
-                        expression {
-                         return env?.CHANGFE_ID
+                        allOf {
+                          expression {
+                           return env?.CHANGE_ID
+                          }
+                          expression {
+                            return params.STORE_PR_ARTIFACT == true
+                          }
                         }
-                        }
+                      }
                     }
                     steps{
+                    script {
+                            sh "printenv"
+                            if (params.STORE_PR_ARTIFACT == true) {
+                                sh "cd  ./dist && for f in jobserve*.whl; do mv \$f \${f%.whl}-${BRANCH_NAME}.whl; done"
+                                sh "cd  ./dist && for f in jobserve*.tar.gz; do mv \$f \${f%.tar.gz}-${BRANCH_NAME}.tar.gz; done"
+                             }
+                            sh "ls -ltra"
                         echo "Upload artifactory"
+                        }
                     }
                 }
                 stage('Pushing New Tags') {
                     when { 
-                branch 'master'
-                
-            }
+                     branch 'master'
+                    }
                     steps {
-                    sh "printenv"
                        echo "Pushing new tags"
                     }
                 }
                 stage('Docker development image') {
                     when { 
-                branch 'master'
+                     branch 'master'
                 
-            }
+                   }
                     steps {
                        echo "Docker development image"
                     }
