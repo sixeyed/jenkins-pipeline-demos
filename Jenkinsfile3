@@ -4,13 +4,13 @@ pipeline {
     stages {
         stage('Store Artifacts'){ //Combined to improve speed
             when { 
-               branch 'master'
+               not { branch 'master' }
                 
             }
             parallel{
                 stage('Upload to Artifactory') {
                     when {
-                        branch 'master'
+                        not { branch 'master' }
                     }
                     steps{
                         sh "printenv"
