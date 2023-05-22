@@ -94,5 +94,9 @@ pipeline {
             }
         }
     }
+    stage('Clean workspace') {
+    deleteDir()
+    sh 'ls -lah'
+}
 }
 
