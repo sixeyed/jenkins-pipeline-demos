@@ -6,7 +6,6 @@ def defaultRegistry = "361053095112.dkr.ecr.us-east-1.amazonaws.com"
 
 pipeline {
     options {
-        skipDefaultCheckout()
         timestamps ()
     }
     agent any
@@ -94,9 +93,10 @@ pipeline {
             }
         }
     }
-    stage('Clean workspace') {
-    deleteDir()
-    sh 'ls -lah'
-}
+    post { 
+        always { 
+            cleanWs()
+        }
+    }
 }
 
