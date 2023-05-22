@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Store Artifacts'){ //Combined to improve speed
             when { 
-                expression { return 1 ==1  } 
+               branch 'master'
                 
             }
             parallel{
