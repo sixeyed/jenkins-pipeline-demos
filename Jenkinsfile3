@@ -5,7 +5,8 @@ pipeline {
         stage('Store Artifacts'){ //Combined to improve speed
             when { 
                expression {
-               return env?.CHANGE_ID != null
+               return env?.CHANGE_ID
+               }
                 
             }
             parallel{
