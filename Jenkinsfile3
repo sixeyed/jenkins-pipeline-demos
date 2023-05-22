@@ -3,14 +3,22 @@ pipeline {
 
     stages {
         stage('Store Artifacts'){ //Combined to improve speed
-            when { 
+            when {
+            anyOf {
                branch 'master'
-                
+               expression {
+                return env?.CHANGFE_ID
+               } 
             }
             parallel{
                 stage('Upload to Artifactory') {
                     when {
+                    anyOf {
                         branch 'master'
+                        expression {
+                         return env?.CHANGFE_ID
+                        }
+                        }
                     }
                     steps{
                         echo "Upload artifactory"
