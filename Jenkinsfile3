@@ -7,7 +7,7 @@ pipeline {
              anyOf {
                 branch 'master'
                 expression {
-                 return env?.CHANGFE_ID
+                 return env?.CHANGE_ID
                 }
               }
             }
@@ -17,7 +17,7 @@ pipeline {
                      anyOf {
                         branch 'master'
                         expression {
-                         return env?.CHANGFE_ID
+                         return env?.CHANGE_ID
                         }
                       }
                     }
