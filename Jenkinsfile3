@@ -13,6 +13,7 @@ pipeline {
                         branch 'master'
                     }
                     steps{
+                        sh "printenv"
                         echo "Upload artifactory"
                     }
                 }
