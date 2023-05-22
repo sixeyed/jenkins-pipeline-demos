@@ -18,6 +18,11 @@ pipeline {
             defaultValue: "${defaultRegistry}/bmll-compute-env-build-agent:latest")
         string(name: "DOCKER_DEV_REPO",
             defaultValue: "${defaultRegistry}/ed-jobserve-dev")
+        booleanParam(
+              defaultValue: false,
+              description: 'Only Appliocable for PR Jobs',
+              name: 'STORE_PR_ARTIFACT'
+            )
     }
 
     environment {
@@ -31,8 +36,13 @@ pipeline {
             when {
              anyOf {
                 branch 'master'
+                allOf {
                 expression {
                  return env?.CHANGE_ID
+                }
+                expression {
+                  return params.STORE_PR_ARTIFACT = true
+                }
                 }
               }
             }
@@ -41,8 +51,13 @@ pipeline {
                     when {
                      anyOf {
                         branch 'master'
-                        expression {
-                         return env?.CHANGE_ID
+                        allOf {
+                          expression {
+                           return env?.CHANGE_ID
+                          }
+                          expression {
+                            return params.STORE_PR_ARTIFACT = true
+                          }
                         }
                       }
                     }
