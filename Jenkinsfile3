@@ -41,7 +41,7 @@ pipeline {
                  return env?.CHANGE_ID
                 }
                 expression {
-                  return params.STORE_PR_ARTIFACT = true
+                  return params.STORE_PR_ARTIFACT == true
                 }
                 }
               }
@@ -56,7 +56,7 @@ pipeline {
                            return env?.CHANGE_ID
                           }
                           expression {
-                            return params.STORE_PR_ARTIFACT = true
+                            return params.STORE_PR_ARTIFACT == true
                           }
                         }
                       }
