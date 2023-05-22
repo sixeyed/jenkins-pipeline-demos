@@ -22,6 +22,7 @@ pipeline {
                 
             }
                     steps {
+                    sh "printenv"
                        echo "Pushing new tags"
                     }
                 }
