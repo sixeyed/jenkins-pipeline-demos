@@ -1,6 +1,31 @@
+properties([
+        [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '10', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '']]
+]);
+
+def defaultRegistry = "361053095112.dkr.ecr.us-east-1.amazonaws.com"
+
 pipeline {
+    options {
+        skipDefaultCheckout()
+        timestamps ()
+    }
     agent any
 
+    parameters {
+        string(name: "DOCKER_REGISTRY",
+            defaultValue: defaultRegistry)
+        string(name: "DOCKER_BUILD_IMAGE",
+            defaultValue: "${defaultRegistry}/bmll-compute-env-build-agent:latest")
+        string(name: "DOCKER_DEV_REPO",
+            defaultValue: "${defaultRegistry}/ed-jobserve-dev")
+    }
+
+    environment {
+        SLACK_CHANNEL = "ed-team"
+        JIRA_REGEX = '.*(CE|PLAT|BMLL|SYS|IQA|ED|CR|LD|NCO)-[0-9]+.*$'
+        BLACKDUCK_CREDENTIAL='blackduck-token'
+        DETECT_PROJECT_NAME='ED/jobserve'
+    }
     stages {
         stage('Store Artifacts'){ //Combined to improve speed
             when {
