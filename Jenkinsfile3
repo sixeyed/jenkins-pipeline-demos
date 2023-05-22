@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Store Artifacts'){ //Combined to improve speed
+            when { 
+                expression { return 1 ==1  } 
+                
+            }
+            parallel{
+                stage('Upload to Artifactory') {
+                    when {
+                        branch 'master'
+                    }
+                    steps{
+                        echo "Upload artifactory"
+                    }
+                }
+                stage('Pushing New Tags') {
+                    when { 
+                branch 'master'
+                
+            }
+                    steps {
+                       echo "Pushing new tags"
+                    }
+                }
+                stage('Docker development image') {
+                    when { 
+                branch 'master'
+                
+            }
+                    steps {
+                       echo "Docker development image"
+                    }
+                }
+            }
+        }
+    }
+}
