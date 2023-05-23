@@ -1,4 +1,4 @@
-@Library('devops-pipeline')
+library 'devops-pipeline'
 
 properties([
         [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '10', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '']]
