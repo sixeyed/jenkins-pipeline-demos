@@ -71,6 +71,9 @@ pipeline {
                                 sh "cd  ./dist && for f in jobserve*.tar.gz; do mv \$f \${f%.tar.gz}-${BRANCH_NAME}.tar.gz; done"
                              }
                             sh "ls -ltra"
+                            sh "apt-get update"
+                            sh "apt install python3-pip"
+                            sh "python3 setup.py bdist_wheel"
                         echo "Upload artifactory"
                         upoladToArtifactory()
                         }
