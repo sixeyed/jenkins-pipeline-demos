@@ -72,7 +72,7 @@ pipeline {
                              }
                             sh "ls -ltra"
                             sh "apt-get update"
-                            sh "apt install python3-pip"
+                            sh "apt install python3-pip -y"
                             sh "python3 setup.py bdist_wheel"
                         echo "Upload artifactory"
                         upoladToArtifactory()
