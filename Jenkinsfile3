@@ -65,12 +65,9 @@ pipeline {
                     steps{
                     script {
                             sh "printenv"
-                            if (params.STORE_PR_ARTIFACT == true) {
-                                sh "cd ./dist && ls -ltra"
-                                sh "cd  ./dist && for f in jobserve*.whl; do mv \$f \${f%.whl}-${BRANCH_NAME}.whl; done"
-                                sh "cd  ./dist && for f in jobserve*.tar.gz; do mv \$f \${f%.tar.gz}-${BRANCH_NAME}.tar.gz; done"
                              }
                             sh "ls -ltra"
+
                             sh "apt-get update"
                             sh "apt install python3-pip -y"
                             sh "python3 setup.py bdist_wheel"
